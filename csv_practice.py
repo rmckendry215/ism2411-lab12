@@ -76,3 +76,56 @@ with open(file_path, "r") as input_file, open("data/cleaned.csv", "w", newline="
 
 print(f"Rows written: {written_count}")
 print(f"Original rows: {original_count}")
+
+print("--- Exercise 6 ---")
+
+dict_total_revenue = 0
+
+with open(file_path, "r") as file:
+    reader = csv.DictReader(file)
+
+    for row in reader:
+        product = row["product"]
+        price = float(row["price"])
+        quantity = int(row["quantity"])
+
+        total = price * quantity
+        dict_total_revenue += total
+
+        print(f"{product}: {quantity} units × ${price:.2f} = ${total:.2f}")
+
+print(f"Total revenue: ${dict_total_revenue:.2f}")
+
+# csv.reader is easier when I know where each value is in the row.
+# DictReader is easier when I want to use the column names instead.
+
+print("--- Exercise 7 ---")
+
+summary = {}
+
+with open(file_path, "r") as file:
+    reader = csv.DictReader(file)
+
+    for row in reader:
+        product = row["product"]
+        price = float(row["price"])
+        quantity = int(row["quantity"])
+
+        total = price * quantity
+
+        if product in summary:
+            summary[product] += total  # add to the existing total
+        else:
+            summary[product] = total
+
+for product in sorted(summary):
+    print(f"{product}: ${summary[product]:.2f}")
+
+print("--- Exercise 8 ---")
+
+timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+with open("data/run_log.txt", "a") as log_file:
+    log_file.write(f"{timestamp} | Total revenue: ${total_revenue:.2f}\n")
+
+print("Run added to data/run_log.txt")
